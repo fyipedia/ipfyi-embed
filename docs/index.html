@@ -1,139 +1,788 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IPFYI Embed Widget — Networks Widgets for Any Website</title>
-  <meta name="description" content="Embed IPFYI networks widgets on any website. Zero dependencies, Shadow DOM isolation, 4 themes, 2 styles.">
-  <meta property="og:title" content="IPFYI Embed Widget">
-  <meta property="og:description" content="Embed IPFYI networks widgets on any website.">
+  <meta name="description" content="Embed IPFYI Networks widgets on any website. Zero dependencies, Shadow DOM, 4 themes, 2 styles. Free CDN via jsDelivr.">
+  <meta name="theme-color" content="#334155">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="IPFYI Embed Widget — Networks for Any Website">
+  <meta property="og:description" content="Add IPFYI network &amp; internet infrastructure widgets, glossary terms, interactive tools, and inline elements to any website in one line of HTML.">
   <meta property="og:url" content="https://widget.ipfyi.com">
   <meta property="og:type" content="website">
+  <meta property="og:image" content="https://ipfyi.com/static/og/homepage.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="IPFYI">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="IPFYI Embed Widget">
+  <meta name="twitter:description" content="Add IPFYI Networks widgets to any website in one line of HTML. Zero dependencies, Shadow DOM.">
+  <meta name="twitter:image" content="https://ipfyi.com/static/og/homepage.png">
+
+  <!-- Canonical + SEO -->
   <link rel="canonical" href="https://widget.ipfyi.com">
+  <meta name="author" content="FYIPedia">
+  <meta name="robots" content="index, follow">
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://ipfyi.com/static/favicon.ico" sizes="32x32">
+  <link rel="icon" href="https://ipfyi.com/static/icon.svg" type="image/svg+xml">
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://ipfyi.com">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"IPFYI Embed Widget","url":"https://widget.ipfyi.com","applicationCategory":"DeveloperApplication","operatingSystem":"Web","description":"Embed IPFYI Networks widgets on any website. Zero dependencies, Shadow DOM isolation, 4 themes.","publisher":{"@type":"Organization","name":"FYIPedia","url":"https://fyipedia.com"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"IPFYI","item":"https://ipfyi.com"},{"@type":"ListItem","position":2,"name":"Widget Docs"}]},{"@type":"SoftwareSourceCode","name":"ipfyi-embed","codeRepository":"https://github.com/fyipedia/ipfyi-embed","programmingLanguage":"TypeScript","runtimePlatform":"Browser","license":"https://opensource.org/licenses/MIT"}]}
+  </script>
+
+  <!-- JetBrains Mono for code blocks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { accent: '#334155' },
+          fontFamily: {
+            mono: ['"JetBrains Mono"', '"Fira Code"', 'ui-monospace', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Dark mode FOUC prevention -->
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <!-- Alpine.js CDN -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"></script>
+
+  <!-- Embed script via jsDelivr -->
+  <script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"></script>
+
   <style>
-    :root { --accent: #334155; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: #1e293b; line-height: 1.6; }
-    .dark body { color: #f3f4f6; background: #0f172a; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
-    .hero { background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #000)); color: #fff; padding: 64px 0; text-align: center; }
-    .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
-    .hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto 24px; }
-    .badge-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-    .badge-link { display: inline-block; background: rgba(255,255,255,0.2); color: #fff; padding: 6px 16px; border-radius: 999px; font-size: 0.875rem; font-weight: 500; text-decoration: none; transition: background 0.2s; }
-    .badge-link:hover { background: rgba(255,255,255,0.3); text-decoration: none; }
-    section { padding: 48px 0; border-bottom: 1px solid #e2e8f0; }
-    .dark section { border-color: #334155; }
-    section h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 16px; color: var(--accent); }
-    pre { background: #1e1e2e; color: #cdd6f4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 0.875rem; line-height: 1.5; font-family: ui-monospace, 'SF Mono', monospace; position: relative; }
-    .dark pre { background: #11111b; }
-    code { font-family: ui-monospace, 'SF Mono', monospace; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-    th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
-    .dark th, .dark td { border-color: #334155; }
-    th { font-weight: 600; color: #64748b; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
-    .widget-demo { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; padding: 24px 0; }
-    .theme-toggle { position: fixed; top: 16px; right: 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-size: 0.875rem; cursor: pointer; z-index: 100; font-family: inherit; }
-    footer { padding: 32px 0; text-align: center; font-size: 0.875rem; color: #64748b; }
+    [x-cloak]{display:none!important}
+    :root{--accent:#334155} .accent-text{color:var(--accent)} .accent-bg{background-color:var(--accent)} .accent-border{border-color:var(--accent)}
+    pre{tab-size:2;margin:0}
+    .code-block-wrapper{position:relative;margin-bottom:1rem}
+    .code-lang-badge{position:absolute;top:0;left:12px;transform:translateY(-50%);background:#1e293b;color:#94a3b8;font-family:'JetBrains Mono','Fira Code',monospace;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em;z-index:1}
+    .code-copy-btn{position:absolute;top:8px;right:8px;background:#334155;color:#94a3b8;border:none;padding:4px 10px;border-radius:4px;font-size:11px;font-family:'JetBrains Mono','Fira Code',monospace;cursor:pointer;transition:background .15s;z-index:1}
+    .code-copy-btn:hover{background:#475569}
+    .code-block{background:#0f172a;color:#e2e8f0;border-radius:8px;padding:1.25rem 1.25rem 1rem;font-size:13px;line-height:1.7;overflow-x:auto;font-family:'JetBrains Mono','Fira Code',ui-monospace,monospace;-webkit-font-smoothing:antialiased}
+    .hl-tag{color:#7dd3fc} .hl-attr{color:#86efac} .hl-val{color:#fde68a} .hl-comment{color:#475569;font-style:italic} .hl-str{color:#fda4af} .hl-kw{color:#c4b5fd} .hl-num{color:#fdba74} .hl-fn{color:#67e8f9} .hl-punct{color:#94a3b8}
+    .mock-card{border-radius:8px;overflow:hidden;font-size:11px;line-height:1.5}
+    .mock-card .mc-foot{font-size:9px;color:#9ca3af;border-top:1px solid #f3f4f6;padding-top:6px;margin-top:8px}
+    .dark .mock-card .mc-foot{border-color:#374151;color:#6b7280}
+    .mock-card .mc-foot a{font-size:9px}
+    .ws-btn{padding:6px 14px;border-radius:9999px;font-size:12px;font-weight:500;border:1px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .15s;font-family:'JetBrains Mono','Fira Code',monospace}
+    .ws-btn:hover{border-color:#cbd5e1;color:#334155}
+    .ws-btn.active{background:#334155;color:#fff;border-color:#334155}
+    .dark .ws-btn{background:#1e293b;border-color:#334151;color:#94a3b8}
+    .dark .ws-btn:hover{border-color:#4b5563;color:#e2e8f0}
+    .dark .ws-btn.active{background:#334155;color:#fff;border-color:#334155}
+    .net-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;font-family:'JetBrains Mono',monospace}
+    .speed-bar-bg{background:#e5e7eb;border-radius:9999px;height:5px;overflow:hidden;margin-top:3px}
+    .speed-bar-fill{height:5px;border-radius:9999px;transition:width .3s}
+    .dark .speed-bar-bg{background:#374151}
   </style>
 </head>
-<body>
-  <button class="theme-toggle" onclick="document.documentElement.classList.toggle('dark')">Toggle Dark</button>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased" x-data="{ darkMode: document.documentElement.classList.contains('dark') }">
 
-  <div class="hero">
-    <div class="container">
-      <h1>IPFYI Embed Widget</h1>
-      <p>Embed networks widgets on any website. Zero dependencies, Shadow DOM isolation, 4 themes.</p>
-      <div class="badge-row">
-        <a class="badge-link" href="https://www.npmjs.com/package/ipfyi-embed" target="_blank" rel="noopener">npm</a>
-        <a class="badge-link" href="https://github.com/fyipedia/ipfyi-embed" target="_blank" rel="noopener">GitHub</a>
-        <a class="badge-link" href="https://ipfyi.com" target="_blank" rel="noopener">Visit IPFYI</a>
+<!-- ═══════════════════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════════════════ -->
+<header class="sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-2 min-w-0">
+      <!-- Network/signal icon -->
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" class="flex-shrink-0" style="color:#334155">
+        <path d="M1.5 8.5C5.5 4.5 10.5 2.5 12 2.5s6.5 2 10.5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M5 12c1.9-1.9 4.5-3 7-3s5.1 1.1 7 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M8.5 15.5c.9-.9 2.2-1.5 3.5-1.5s2.6.6 3.5 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
+      </svg>
+      <span class="font-semibold text-sm">IPFYI Widget</span>
+      <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">v1.0</span>
+    </div>
+    <nav class="hidden md:flex items-center gap-5 text-sm text-gray-500 dark:text-gray-400">
+      <a href="#quick-start" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Quick Start</a>
+      <a href="#gallery" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Gallery</a>
+      <a href="#options" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Options</a>
+      <a href="#cdn" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">CDN</a>
+    </nav>
+    <div class="flex items-center gap-2 flex-shrink-0">
+      <button @click="darkMode=!darkMode; document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', darkMode?'dark':'light')" class="p-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="Toggle dark mode">
+        <svg x-show="!darkMode" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg x-show="darkMode" x-cloak width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <a href="https://ipfyi.com" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
+        Visit IPFYI
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════════ -->
+<section class="max-w-6xl mx-auto px-4 sm:px-6 py-16 md:py-24">
+  <div class="grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-5 border" style="border-color:#33415533;background:#33415511;color:#334155">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Network FYI Embed · Zero Dependencies
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-5">
+        Embed <span style="color:#334155">IPFYI</span> widgets anywhere
+      </h1>
+      <p class="text-lg text-gray-500 dark:text-gray-400 mb-8 leading-relaxed">
+        Add IPFYI Networks cards, network glossary terms, interactive tools, speed bars, and inline badges to any website — one script tag.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="#quick-start" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90" style="background:#334155">
+          Get Started
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="https://github.com/fyipedia/ipfyi-embed" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.npmjs.com/package/ipfyi-embed" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
+          npm
+        </a>
+      </div>
+      <div class="flex flex-wrap gap-4 mt-6 text-xs text-gray-400 dark:text-gray-500">
+        <span class="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Zero dependencies</span>
+        <span class="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Shadow DOM isolation</span>
+        <span class="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Speed bars &amp; protocol badges</span>
+        <span class="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>4 themes · 2 styles</span>
+      </div>
+    </div>
+
+    <!-- Mock widget preview -->
+    <div class="relative">
+      <div class="mock-card bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xl p-4">
+        <div class="flex items-start gap-3 mb-3">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#33415522">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-0.5">
+              <span class="font-semibold text-sm text-gray-900 dark:text-gray-100">Sample Networks</span>
+              <span class="net-badge text-white text-xs" style="background:#334155">Active</span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">Detailed network infrastructure reference data with specifications and standards.</p>
+          </div>
+        </div>
+        <!-- Speed bar visualization -->
+        <div class="mb-3">
+          <div class="flex justify-between text-xs text-gray-500 mb-1"><span>Bandwidth</span><span style="color:#334155">400 Gbps</span></div>
+          <div class="speed-bar-bg"><div class="speed-bar-fill" style="width:80%;background:#334155"></div></div>
+          <div class="flex justify-between text-xs text-gray-500 mt-1 mb-1"><span>Latency</span><span>12ms</span></div>
+          <div class="speed-bar-bg"><div class="speed-bar-fill" style="width:40%;background:#64748b"></div></div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-gray-50 dark:bg-gray-800 rounded p-2"><div class="text-xs text-gray-400 mb-0.5">Protocol</div><div class="text-xs font-medium text-gray-700 dark:text-gray-300">TCP/IP</div></div>
+          <div class="bg-gray-50 dark:bg-gray-800 rounded p-2"><div class="text-xs text-gray-400 mb-0.5">Standard</div><div class="text-xs font-medium text-gray-700 dark:text-gray-300">IEEE 802.3</div></div>
+        </div>
+        <div class="mc-foot flex items-center justify-between mt-3">
+          <span>Network reference · wirefyi.com</span>
+          <a href="https://ipfyi.com" target="_blank" style="color:#334155" class="hover:underline">View on IPFYI ↗</a>
+        </div>
+      </div>
+      <div class="absolute -top-3 -right-3 px-2.5 py-1 rounded-full text-xs font-mono font-semibold text-white shadow-lg" style="background:#334155">Networks</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     QUICK START
+═══════════════════════════════════════════════════════════ -->
+<section id="quick-start" class="border-t border-gray-100 dark:border-gray-800 py-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold mb-3">Quick Start</h2>
+      <p class="text-gray-500 dark:text-gray-400">One script tag. Networks embedded in 30 seconds.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 mb-10">
+      <div class="p-5 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white mb-3" style="background:#334155">1</div>
+        <h3 class="font-semibold mb-1.5">Add the script</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Include the embed script from jsDelivr CDN anywhere in your HTML.</p>
+      </div>
+      <div class="p-5 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white mb-3" style="background:#334155">2</div>
+        <h3 class="font-semibold mb-1.5">Place the element</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Add a div with the <code class="font-mono text-xs px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded">data-ipfyi</code> attribute.</p>
+      </div>
+      <div class="p-5 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white mb-3" style="background:#334155">3</div>
+        <h3 class="font-semibold mb-1.5">Done</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">The widget renders automatically — fully isolated by Shadow DOM with auto dark mode.</p>
+      </div>
+    </div>
+    <div class="max-w-3xl mx-auto">
+      <div class="code-block-wrapper pt-4">
+        <span class="code-lang-badge">HTML</span>
+        <button class="code-copy-btn" onclick="(function(b){var t=document.getElementById('qs-code').textContent;navigator.clipboard.writeText(t).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})})(this)">Copy</button>
+        <pre class="code-block"><code><span class="hl-comment">&lt;!-- Step 1: Add embed script --&gt;</span>
+<span class="hl-tag">&lt;script</span> <span class="hl-attr">src</span>=<span class="hl-val">"https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"</span><span class="hl-tag">&gt;&lt;/script&gt;</span>
+
+<span class="hl-comment">&lt;!-- Step 2: Place the widget --&gt;</span>
+<span class="hl-tag">&lt;div</span> <span class="hl-attr">data-ipfyi</span>=<span class="hl-val">"entity"</span>
+     <span class="hl-attr">data-slug</span>=<span class="hl-val">"example-asn"</span>
+     <span class="hl-attr">data-style</span>=<span class="hl-val">"technical"</span>
+     <span class="hl-attr">data-theme</span>=<span class="hl-val">"auto"</span><span class="hl-tag">&gt;&lt;/div&gt;</span></code></pre>
+      </div>
+      <script type="text/plain" id="qs-code">&lt;script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"&gt;&lt;/script&gt;
+
+&lt;div data-ipfyi="entity"
+     data-slug="example-asn"
+     data-style="technical"
+     data-theme="auto"&gt;&lt;/div&gt;</script>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     WIDGET GALLERY
+═══════════════════════════════════════════════════════════ -->
+<section id="gallery" class="border-t border-gray-100 dark:border-gray-800 py-16 bg-gray-50 dark:bg-gray-900/50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6" x-data="{ activeWidget: 'entity', activeStyle: 'technical' }">
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold mb-3">Widget Gallery</h2>
+      <p class="text-gray-500 dark:text-gray-400">6 widget types × 2 styles × 4 themes</p>
+    </div>
+
+    <!-- Widget type selector -->
+    <div class="flex flex-wrap gap-2 justify-center mb-6">
+      <button @click="activeWidget='entity'" :class="activeWidget==='entity' ? 'active' : ''" class="ws-btn">Entity</button>
+      <button @click="activeWidget='glossary'" :class="activeWidget==='glossary' ? 'active' : ''" class="ws-btn">Glossary</button>
+      <button @click="activeWidget='search'" :class="activeWidget==='search' ? 'active' : ''" class="ws-btn">Search</button>
+      <button @click="activeWidget='compare'" :class="activeWidget==='compare' ? 'active' : ''" class="ws-btn">Compare</button>
+      <button @click="activeWidget='faq'" :class="activeWidget==='faq' ? 'active' : ''" class="ws-btn">FAQ</button>
+      <button @click="activeWidget='inline'" :class="activeWidget==='inline' ? 'active' : ''" class="ws-btn">Inline</button>
+    </div>
+
+    <!-- Style selector -->
+    <div class="flex gap-2 justify-center mb-8">
+      <button @click="activeStyle='technical'" :class="activeStyle==='technical' ? 'active' : ''" class="ws-btn">Technical</button>
+      <button @click="activeStyle='modern'" :class="activeStyle==='modern' ? 'active' : ''" class="ws-btn">Modern</button>
+    </div>
+
+    <!-- Gallery: light + dark side by side -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Light preview -->
+      <div class="rounded-xl border border-gray-200 overflow-hidden">
+        <div class="px-4 py-2 bg-white border-b border-gray-100 text-xs font-mono text-gray-400 flex items-center justify-between">
+          <span>Light theme</span><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span> Preview</span>
+        </div>
+        <div class="p-5 bg-white">
+          <!-- Entity (light) -->
+          <div x-show="activeWidget==='entity'" class="mock-card border border-gray-100 p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#33415522">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg>
+              </div>
+              <div><p class="font-semibold text-xs text-gray-900">Sample Network Entry</p><p class="text-xs text-gray-400">Infrastructure · IPFYI</p></div>
+            </div>
+            <div class="mb-2">
+              <div class="flex justify-between text-xs text-gray-500 mb-0.5"><span>Bandwidth</span><span style="color:#334155">400 Gbps</span></div>
+              <div class="speed-bar-bg"><div class="speed-bar-fill" style="width:80%;background:#334155"></div></div>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5 mb-2">
+              <div class="bg-gray-50 rounded p-1.5"><p class="text-xs text-gray-400">Protocol</p><p class="text-xs font-mono font-medium">TCP/IP</p></div>
+              <div class="bg-gray-50 rounded p-1.5"><p class="text-xs text-gray-400">Standard</p><p class="text-xs font-mono font-medium">IEEE 802.3</p></div>
+            </div>
+            <div class="mc-foot flex justify-between"><span>wirefyi.com</span><a href="#" style="color:#334155">View ↗</a></div>
+          </div>
+          <!-- Glossary (light) -->
+          <div x-show="activeWidget==='glossary'" x-cloak class="mock-card border border-gray-100 p-4">
+            <div class="text-xs font-semibold text-gray-700 mb-1">Network Term</div>
+            <p class="text-xs text-gray-600 mb-2 leading-relaxed">A standardized networking term from RFC or IEEE specification with technical definition.</p>
+            <div class="flex flex-wrap gap-1 mb-2"><span class="px-1.5 py-0.5 rounded text-xs bg-gray-100 font-mono text-gray-600">RFC 793</span><span class="px-1.5 py-0.5 rounded text-xs bg-gray-100 font-mono text-gray-600">OSI Layer 4</span></div>
+            <div class="mc-foot flex justify-between"><span>Network Glossary</span><a href="#" style="color:#334155">Definition ↗</a></div>
+          </div>
+          <!-- Search (light) -->
+          <div x-show="activeWidget==='search'" x-cloak class="mock-card border border-gray-100 p-4">
+            <div class="flex items-center gap-2 bg-gray-50 rounded-lg p-2 mb-3">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <span class="text-xs text-gray-400 font-mono">Search Networks…</span>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-2 rounded-lg px-2 py-1.5 bg-gray-50"><span class="text-xs font-mono font-medium text-gray-700">Result 1</span></div>
+              <div class="flex items-center gap-2 rounded-lg px-2 py-1.5"><span class="text-xs font-mono text-gray-600">Result 2</span></div>
+            </div>
+            <div class="mc-foot">Powered by IPFYI</div>
+          </div>
+          <!-- Compare (light) -->
+          <div x-show="activeWidget==='compare'" x-cloak class="mock-card border border-gray-100 p-4">
+            <div class="text-xs font-semibold text-gray-700 mb-2">Compare Networks</div>
+            <div class="grid grid-cols-2 gap-2 text-xs mb-3">
+              <div class="rounded-lg p-2 bg-gray-50"><p class="font-mono font-semibold text-gray-800 mb-1">Option A</p><p class="text-gray-500">100 Gbps</p><p class="text-gray-500">Layer 3</p></div>
+              <div class="rounded-lg p-2 bg-gray-50"><p class="font-mono font-semibold text-gray-800 mb-1">Option B</p><p class="text-gray-500">400 Gbps</p><p class="text-gray-500">Layer 2</p></div>
+            </div>
+            <div class="mc-foot">Comparison · IPFYI</div>
+          </div>
+          <!-- FAQ (light) -->
+          <div x-show="activeWidget==='faq'" x-cloak class="mock-card border border-gray-100 p-4">
+            <div class="text-xs font-semibold text-gray-700 mb-2">Frequently Asked Questions</div>
+            <div class="space-y-2">
+              <div class="rounded-lg bg-gray-50 p-2"><p class="text-xs font-medium text-gray-800 mb-1">What is the maximum bandwidth?</p><p class="text-xs text-gray-500">Maximum throughput depends on protocol, hardware, and network conditions.</p></div>
+              <div class="rounded-lg bg-gray-50 p-2"><p class="text-xs font-medium text-gray-800 mb-1">Which RFC defines this protocol?</p><p class="text-xs text-gray-500">See the linked RFC documentation for the normative specification.</p></div>
+            </div>
+            <div class="mc-foot">FAQ · IPFYI</div>
+          </div>
+          <!-- Inline (light) -->
+          <div x-show="activeWidget==='inline'" x-cloak class="mock-card border border-gray-100 p-4">
+            <p class="text-xs text-gray-600 mb-3 leading-relaxed">
+              The submarine cable system spans 14,000 km with
+              <span class="net-badge text-white" style="background:#4338CA">400 Gbps</span>
+              capacity. HTTP status
+              <span class="net-badge text-white" style="background:#7C3AED">200 OK</span>
+              indicates success. ASN
+              <span class="net-badge border font-mono" style="border-color:#334155;color:#334155">AS15169</span>
+            </p>
+            <div class="mc-foot mt-1">Inline elements · Network FYI</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dark preview -->
+      <div class="rounded-xl border border-gray-700 overflow-hidden">
+        <div class="px-4 py-2 bg-gray-900 border-b border-gray-700 text-xs font-mono text-gray-500 flex items-center justify-between">
+          <span>Dark theme</span><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Preview</span>
+        </div>
+        <div class="p-5 bg-gray-900">
+          <!-- Entity (dark) -->
+          <div x-show="activeWidget==='entity'" class="mock-card border border-gray-700 p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#33415533">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/></svg>
+              </div>
+              <div><p class="font-semibold text-xs text-gray-100">Sample Network Entry</p><p class="text-xs text-gray-500">Infrastructure · IPFYI</p></div>
+            </div>
+            <div class="mb-2">
+              <div class="flex justify-between text-xs text-gray-500 mb-0.5"><span>Bandwidth</span><span style="color:#334155">400 Gbps</span></div>
+              <div class="speed-bar-bg"><div class="speed-bar-fill" style="width:80%;background:#334155"></div></div>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5 mb-2">
+              <div class="bg-gray-800 rounded p-1.5"><p class="text-xs text-gray-500">Protocol</p><p class="text-xs font-mono font-medium text-gray-200">TCP/IP</p></div>
+              <div class="bg-gray-800 rounded p-1.5"><p class="text-xs text-gray-500">Standard</p><p class="text-xs font-mono font-medium text-gray-200">IEEE 802.3</p></div>
+            </div>
+            <div class="mc-foot flex justify-between"><span>wirefyi.com</span><a href="#" style="color:#334155">View ↗</a></div>
+          </div>
+          <!-- Glossary (dark) -->
+          <div x-show="activeWidget==='glossary'" x-cloak class="mock-card border border-gray-700 p-4">
+            <div class="text-xs font-semibold text-gray-200 mb-1">Network Term</div>
+            <p class="text-xs text-gray-400 mb-2 leading-relaxed">A standardized networking term with technical definition and RFC references.</p>
+            <div class="flex flex-wrap gap-1 mb-2"><span class="px-1.5 py-0.5 rounded text-xs bg-gray-800 font-mono text-gray-400">RFC 793</span><span class="px-1.5 py-0.5 rounded text-xs bg-gray-800 font-mono text-gray-400">OSI Layer 4</span></div>
+            <div class="mc-foot flex justify-between"><span>Network Glossary</span><a href="#" style="color:#334155">Definition ↗</a></div>
+          </div>
+          <!-- Search (dark) -->
+          <div x-show="activeWidget==='search'" x-cloak class="mock-card border border-gray-700 p-4">
+            <div class="flex items-center gap-2 bg-gray-800 rounded-lg p-2 mb-3">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <span class="text-xs text-gray-500 font-mono">Search Networks…</span>
+            </div>
+            <div class="space-y-1.5">
+              <div class="rounded-lg px-2 py-1.5 bg-gray-800"><span class="text-xs font-mono font-medium text-gray-200">Result 1</span></div>
+              <div class="rounded-lg px-2 py-1.5"><span class="text-xs font-mono text-gray-400">Result 2</span></div>
+            </div>
+            <div class="mc-foot">Powered by IPFYI</div>
+          </div>
+          <!-- Compare (dark) -->
+          <div x-show="activeWidget==='compare'" x-cloak class="mock-card border border-gray-700 p-4">
+            <div class="text-xs font-semibold text-gray-200 mb-2">Compare Networks</div>
+            <div class="grid grid-cols-2 gap-2 text-xs mb-3">
+              <div class="rounded-lg p-2 bg-gray-800"><p class="font-mono font-semibold text-gray-200 mb-1">Option A</p><p class="text-gray-500">100 Gbps · L3</p></div>
+              <div class="rounded-lg p-2 bg-gray-800"><p class="font-mono font-semibold text-gray-200 mb-1">Option B</p><p class="text-gray-500">400 Gbps · L2</p></div>
+            </div>
+            <div class="mc-foot">Comparison · IPFYI</div>
+          </div>
+          <!-- FAQ (dark) -->
+          <div x-show="activeWidget==='faq'" x-cloak class="mock-card border border-gray-700 p-4">
+            <div class="text-xs font-semibold text-gray-200 mb-2">Frequently Asked Questions</div>
+            <div class="space-y-2">
+              <div class="rounded-lg bg-gray-800 p-2"><p class="text-xs font-medium text-gray-200 mb-1">What is the maximum bandwidth?</p><p class="text-xs text-gray-500">Depends on protocol, hardware, and conditions.</p></div>
+              <div class="rounded-lg bg-gray-800 p-2"><p class="text-xs font-medium text-gray-200 mb-1">Which RFC defines this protocol?</p><p class="text-xs text-gray-500">See the linked RFC documentation.</p></div>
+            </div>
+            <div class="mc-foot">FAQ · IPFYI</div>
+          </div>
+          <!-- Inline (dark) -->
+          <div x-show="activeWidget==='inline'" x-cloak class="mock-card border border-gray-700 p-4">
+            <p class="text-xs text-gray-400 mb-3 leading-relaxed">
+              Cable spans 14,000 km with
+              <span class="net-badge text-white" style="background:#4338CA">400 Gbps</span>
+              capacity. Status
+              <span class="net-badge text-white" style="background:#7C3AED">200 OK</span>
+              means success. ASN
+              <span class="net-badge border font-mono" style="border-color:#334155;color:#334155">AS15169</span>
+            </p>
+            <div class="mc-foot mt-1">Inline elements · Network FYI</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code snippet -->
+    <div class="mt-6 max-w-3xl mx-auto">
+      <div x-show="activeWidget==='entity'" class="code-block-wrapper pt-4">
+        <span class="code-lang-badge">HTML</span>
+        <button class="code-copy-btn" onclick="(function(b){var t=document.getElementById('code-entity').textContent;navigator.clipboard.writeText(t).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})})(this)">Copy</button>
+        <pre class="code-block"><code><span class="hl-tag">&lt;div</span> <span class="hl-attr">data-ipfyi</span>=<span class="hl-val">"entity"</span>
+     <span class="hl-attr">data-slug</span>=<span class="hl-val">"example-asn"</span>
+     <span class="hl-attr">data-style</span>=<span class="hl-val">"technical"</span>
+     <span class="hl-attr">data-theme</span>=<span class="hl-val">"auto"</span><span class="hl-tag">&gt;&lt;/div&gt;</span></code></pre>
+        <script type="text/plain" id="code-entity">&lt;div data-ipfyi="entity" data-slug="example-asn" data-style="technical" data-theme="auto"&gt;&lt;/div&gt;</script>
+      </div>
+      <div x-show="activeWidget==='glossary'" x-cloak class="code-block-wrapper pt-4">
+        <span class="code-lang-badge">HTML</span>
+        <button class="code-copy-btn" onclick="(function(b){var t=document.getElementById('code-glossary').textContent;navigator.clipboard.writeText(t).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})})(this)">Copy</button>
+        <pre class="code-block"><code><span class="hl-tag">&lt;div</span> <span class="hl-attr">data-ipfyi</span>=<span class="hl-val">"glossary"</span>
+     <span class="hl-attr">data-slug</span>=<span class="hl-val">"network-term"</span>
+     <span class="hl-attr">data-theme</span>=<span class="hl-val">"auto"</span><span class="hl-tag">&gt;&lt;/div&gt;</span></code></pre>
+        <script type="text/plain" id="code-glossary">&lt;div data-ipfyi="glossary" data-slug="network-term" data-theme="auto"&gt;&lt;/div&gt;</script>
+      </div>
+      <div x-show="activeWidget==='search'" x-cloak class="code-block-wrapper pt-4">
+        <span class="code-lang-badge">HTML</span>
+        <button class="code-copy-btn" onclick="(function(b){var t=document.getElementById('code-search').textContent;navigator.clipboard.writeText(t).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})})(this)">Copy</button>
+        <pre class="code-block"><code><span class="hl-tag">&lt;div</span> <span class="hl-attr">data-ipfyi</span>=<span class="hl-val">"search"</span>
+     <span class="hl-attr">data-placeholder</span>=<span class="hl-val">"Search Networks…"</span>
+     <span class="hl-attr">data-theme</span>=<span class="hl-val">"auto"</span><span class="hl-tag">&gt;&lt;/div&gt;</span></code></pre>
+        <script type="text/plain" id="code-search">&lt;div data-ipfyi="search" data-placeholder="Search Networks…" data-theme="auto"&gt;&lt;/div&gt;</script>
+      </div>
+      <div x-show="activeWidget==='compare'" x-cloak class="code-block-wrapper pt-4">
+        <span class="code-lang-badge">HTML</span>
+        <button class="code-copy-btn" onclick="(function(b){var t=document.getElementById('code-compare').textContent;navigator.clipboard.writeText(t).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})})(this)">Copy</button>
+        <pre class="code-block"><code><span class="hl-tag">&lt;div</span> <span class="hl-attr">data-ipfyi</span>=<span class="hl-val">"compare"</span>
+     <span class="hl-attr">data-slug-a</span>=<span class="hl-val">"option-a"</span>
+     <span class="hl-attr">data-slug-b</span>=<span class="hl-val">"option-b"</span>
+     <span class="hl-attr">data-theme</span>=<span class="hl-val">"auto"</span><span class="hl-tag">&gt;&lt;/div&gt;</span></code></pre>
+        <script type="text/plain" id="code-compare">&lt;div data-ipfyi="compare" data-slug-a="option-a" data-slug-b="option-b" data-theme="auto"&gt;&lt;/div&gt;</script>
+      </div>
+      <div x-show="activeWidget==='faq'" x-cloak class="code-block-wrapper pt-4">
+        <span class="code-lang-badge">HTML</span>
+        <button class="code-copy-btn" onclick="(function(b){var t=document.getElementById('code-faq').textContent;navigator.clipboard.writeText(t).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})})(this)">Copy</button>
+        <pre class="code-block"><code><span class="hl-tag">&lt;div</span> <span class="hl-attr">data-ipfyi</span>=<span class="hl-val">"faq"</span>
+     <span class="hl-attr">data-slug</span>=<span class="hl-val">"example-asn"</span>
+     <span class="hl-attr">data-theme</span>=<span class="hl-val">"auto"</span><span class="hl-tag">&gt;&lt;/div&gt;</span></code></pre>
+        <script type="text/plain" id="code-faq">&lt;div data-ipfyi="faq" data-slug="example-asn" data-theme="auto"&gt;&lt;/div&gt;</script>
+      </div>
+      <div x-show="activeWidget==='inline'" x-cloak class="code-block-wrapper pt-4">
+        <span class="code-lang-badge">HTML</span>
+        <button class="code-copy-btn" onclick="(function(b){var t=document.getElementById('code-inline').textContent;navigator.clipboard.writeText(t).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})})(this)">Copy</button>
+        <pre class="code-block"><code><span class="hl-comment">&lt;!-- Speed bar (CableFYI) --&gt;</span>
+<span class="hl-tag">&lt;span</span> <span class="hl-attr">data-cablefyi</span>=<span class="hl-val">"speed-bar"</span> <span class="hl-attr">data-slug</span>=<span class="hl-val">"marea"</span><span class="hl-tag">&gt;&lt;/span&gt;</span>
+
+<span class="hl-comment">&lt;!-- ASN badge (IPFYI) --&gt;</span>
+<span class="hl-tag">&lt;span</span> <span class="hl-attr">data-ipfyi</span>=<span class="hl-val">"asn-badge"</span> <span class="hl-attr">data-slug</span>=<span class="hl-val">"AS15169"</span><span class="hl-tag">&gt;&lt;/span&gt;</span>
+
+<span class="hl-comment">&lt;!-- Status badge (StatusCodeFYI) --&gt;</span>
+<span class="hl-tag">&lt;span</span> <span class="hl-attr">data-statuscodefyi</span>=<span class="hl-val">"status-badge"</span> <span class="hl-attr">data-slug</span>=<span class="hl-val">"200"</span><span class="hl-tag">&gt;&lt;/span&gt;</span></code></pre>
+        <script type="text/plain" id="code-inline">&lt;span data-cablefyi="speed-bar" data-slug="marea"&gt;&lt;/span&gt;
+&lt;span data-ipfyi="asn-badge" data-slug="AS15169"&gt;&lt;/span&gt;
+&lt;span data-statuscodefyi="status-badge" data-slug="200"&gt;&lt;/span&gt;</script>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="container">
-    <section>
-      <h2>Quick Start</h2>
-      <pre><code>&lt;div data-ipfyi="entity" data-slug="asn" data-theme="light"&gt;&lt;/div&gt;
-&lt;script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"&gt;&lt;/script&gt;</code></pre>
-    </section>
-
-    <section>
-      <h2>Widget Gallery</h2>
-      <div class="widget-demo">
-        <div data-ipfyi="entity" data-slug="asn" data-theme="light"></div>
-        <div data-ipfyi="entity" data-slug="asn" data-theme="dark"></div>
-      </div>
-      <div class="widget-demo">
-        <div data-ipfyi="search" data-theme="light" data-placeholder="Search Networks..."></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Widget Types</h2>
-      <table>
-        <thead><tr><th>Type</th><th>Description</th></tr></thead>
-        <tbody>
-            <tr><td><code>entity</code></td><td>Entity detail card — cable, ASN, or status code</td></tr>
-            <tr><td><code>glossary</code></td><td>Glossary term definition with cross-references</td></tr>
-            <tr><td><code>search</code></td><td>Search box linking to the full database</td></tr>
-            <tr><td><code>compare</code></td><td>Side-by-side entity comparison</td></tr>
-            <tr><td><code>faq</code></td><td>FAQ accordion with expand/collapse</td></tr>
-            <tr><td><code>isp</code></td><td>ISP detail card — name, type, country, ASN count, IP blocks</td></tr>
-            <tr><td><code>ip-range</code></td><td>IP range card — CIDR, host count, version, ASN</td></tr>
-            <tr><td><code>asn-badge</code></td><td>Inline ASN category colored badge (cloud/isp/cdn/enterprise)</td></tr>
+<!-- ═══════════════════════════════════════════════════════════
+     WIDGET OPTIONS
+═══════════════════════════════════════════════════════════ -->
+<section id="options" class="border-t border-gray-100 dark:border-gray-800 py-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <h2 class="text-3xl font-bold mb-8 text-center">Widget Options</h2>
+    <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300 font-mono text-xs">Attribute</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300 text-xs">Values</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300 text-xs">Default</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300 text-xs">Description</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 font-mono text-xs text-accent">data-ipfyi</td>
+            <td class="px-4 py-3 text-xs font-mono text-gray-600 dark:text-gray-400">entity · glossary · search · compare · faq</td>
+            <td class="px-4 py-3 text-xs text-gray-500">required</td>
+            <td class="px-4 py-3 text-xs text-gray-600 dark:text-gray-400">Widget type to render</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-400">data-slug</td>
+            <td class="px-4 py-3 text-xs font-mono text-gray-600 dark:text-gray-400">string</td>
+            <td class="px-4 py-3 text-xs text-gray-500">required</td>
+            <td class="px-4 py-3 text-xs text-gray-600 dark:text-gray-400">Entity slug from ipfyi.com</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-400">data-style</td>
+            <td class="px-4 py-3 text-xs font-mono text-gray-600 dark:text-gray-400">technical · modern</td>
+            <td class="px-4 py-3 text-xs text-gray-500">technical</td>
+            <td class="px-4 py-3 text-xs text-gray-600 dark:text-gray-400">Visual style variant</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-400">data-theme</td>
+            <td class="px-4 py-3 text-xs font-mono text-gray-600 dark:text-gray-400">light · dark · sepia · auto</td>
+            <td class="px-4 py-3 text-xs text-gray-500">auto</td>
+            <td class="px-4 py-3 text-xs text-gray-600 dark:text-gray-400">Color theme (auto follows OS preference)</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-400">data-lang</td>
+            <td class="px-4 py-3 text-xs font-mono text-gray-600 dark:text-gray-400">en · es · ja …</td>
+            <td class="px-4 py-3 text-xs text-gray-500">en</td>
+            <td class="px-4 py-3 text-xs text-gray-600 dark:text-gray-400">Display language</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-600 dark:text-gray-400">data-no-snippet</td>
+            <td class="px-4 py-3 text-xs font-mono text-gray-600 dark:text-gray-400">true</td>
+            <td class="px-4 py-3 text-xs text-gray-500">false</td>
+            <td class="px-4 py-3 text-xs text-gray-600 dark:text-gray-400">Disable rich snippet injection into host page</td>
+          </tr>
         </tbody>
       </table>
-    </section>
-
-    <section>
-      <h2>Themes</h2>
-      <div class="widget-demo">
-        <div data-ipfyi="entity" data-slug="asn" data-theme="light" data-style-variant="modern"></div>
-        <div data-ipfyi="entity" data-slug="asn" data-theme="dark" data-style-variant="modern"></div>
-        <div data-ipfyi="entity" data-slug="asn" data-theme="sepia" data-style-variant="modern"></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Styles</h2>
-      <div class="widget-demo">
-        <div data-ipfyi="entity" data-slug="asn" data-theme="light" data-style-variant="modern"></div>
-        <div data-ipfyi="entity" data-slug="asn" data-theme="light" data-style-variant="clean"></div>
-      </div>
-    </section>
-
-    <section>
-      <h2>CDN Options</h2>
-      <h3 style="font-size:1rem;margin-bottom:8px;">jsDelivr (recommended)</h3>
-      <pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"&gt;&lt;/script&gt;</code></pre>
-      <h3 style="font-size:1rem;margin:16px 0 8px;">npm</h3>
-      <pre><code>npm install ipfyi-embed</code></pre>
-    </section>
-
-    <section>
-      <h2>Network FYI Family</h2>
-      <table>
-        <thead><tr><th>Site</th><th>Domain</th><th>Focus</th><th>Package</th></tr></thead>
-        <tbody>
-            <tr><td><a href="https://cablefyi.com" target="_blank" rel="noopener">CableFYI</a></td><td>cablefyi.com</td><td>151 cables, connectors, standards, compatibility</td><td><a href="https://www.npmjs.com/package/cablefyi-embed" target="_blank" rel="noopener">npm</a></td></tr>
-            <tr style="font-weight:700;"><td><a href="https://ipfyi.com" target="_blank" rel="noopener">IPFYI</a></td><td>ipfyi.com</td><td>ASN, ISP, IP ranges, network infrastructure</td><td><a href="https://www.npmjs.com/package/ipfyi-embed" target="_blank" rel="noopener">npm</a></td></tr>
-            <tr><td><a href="https://statuscodefyi.com" target="_blank" rel="noopener">StatusCodeFYI</a></td><td>statuscodefyi.com</td><td>HTTP/SMTP/gRPC status codes, protocols, debugging</td><td><a href="https://www.npmjs.com/package/statuscodefyi-embed" target="_blank" rel="noopener">npm</a></td></tr>
-            <tr><td><a href="https://tldfyi.com" target="_blank" rel="noopener">TLDFYI</a></td><td>tldfyi.com</td><td>TLD registry, domain extensions (coming soon)</td><td><span style="color:#9ca3af;">Coming soon</span></td></tr>
-        </tbody>
-      </table>
-    </section>
-  </div>
-
-  <footer>
-    <div class="container">
-      <p>Built by <a href="https://fyipedia.com" target="_blank" rel="noopener">FYIPedia</a> &mdash; MIT License</p>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"></script>
+<!-- ═══════════════════════════════════════════════════════════
+     STYLES & THEMES
+═══════════════════════════════════════════════════════════ -->
+<section class="border-t border-gray-100 dark:border-gray-800 py-16 bg-gray-50 dark:bg-gray-900/50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <h2 class="text-3xl font-bold mb-3 text-center">Styles &amp; Themes</h2>
+    <p class="text-center text-gray-500 dark:text-gray-400 mb-10">2 styles × 4 themes = 8 combinations. Shadow DOM isolated.</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      <div class="rounded-xl border-2 p-4 bg-white" style="border-color:#334155">
+        <div class="w-8 h-8 rounded-lg mb-2" style="background:#334155"></div>
+        <div class="font-semibold text-sm mb-0.5">Light</div>
+        <div class="text-xs text-gray-500">Clean white</div>
+        <div class="mt-2 font-mono text-xs text-gray-400">data-theme="light"</div>
+      </div>
+      <div class="rounded-xl border-2 p-4 bg-gray-900 text-white border-gray-700">
+        <div class="w-8 h-8 rounded-lg mb-2" style="background:#334155"></div>
+        <div class="font-semibold text-sm mb-0.5">Dark</div>
+        <div class="text-xs text-gray-400">Deep dark</div>
+        <div class="mt-2 font-mono text-xs text-gray-500">data-theme="dark"</div>
+      </div>
+      <div class="rounded-xl border-2 p-4 border-yellow-200" style="background:#f5f0e8">
+        <div class="w-8 h-8 rounded-lg mb-2" style="background:#334155"></div>
+        <div class="font-semibold text-sm mb-0.5">Sepia</div>
+        <div class="text-xs" style="color:#8b7d6b">Warm reading</div>
+        <div class="mt-2 font-mono text-xs" style="color:#8b7d6b">data-theme="sepia"</div>
+      </div>
+      <div class="rounded-xl border-2 p-4 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+        <div class="w-8 h-8 rounded-lg mb-2 bg-gradient-to-br from-gray-200 to-gray-800"></div>
+        <div class="font-semibold text-sm mb-0.5">Auto</div>
+        <div class="text-xs text-gray-500">Follows OS</div>
+        <div class="mt-2 font-mono text-xs text-gray-400">data-theme="auto"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CDN OPTIONS
+═══════════════════════════════════════════════════════════ -->
+<section id="cdn" class="border-t border-gray-100 dark:border-gray-800 py-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <h2 class="text-3xl font-bold mb-3 text-center">CDN Options</h2>
+    <p class="text-center text-gray-500 dark:text-gray-400 mb-10">Multiple delivery options for every use case.</p>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="rounded-xl border-2 p-5 relative" style="border-color:#334155">
+        <div class="absolute -top-3 left-4 px-2.5 py-0.5 text-xs font-semibold text-white rounded-full" style="background:#334155">Recommended</div>
+        <div class="font-bold mb-1">jsDelivr</div>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Global CDN with automatic version resolution.</p>
+        <div class="code-block-wrapper pt-4">
+          <span class="code-lang-badge">HTML</span>
+          <button class="code-copy-btn" onclick="(function(b){var t=document.getElementById('cdn-jsdelivr').textContent;navigator.clipboard.writeText(t).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})})(this)">Copy</button>
+          <pre class="code-block" style="font-size:11px"><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">src</span>=<span class="hl-val">"https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"</span><span class="hl-tag">&gt;&lt;/script&gt;</span></code></pre>
+          <script type="text/plain" id="cdn-jsdelivr">&lt;script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"&gt;&lt;/script&gt;</script>
+        </div>
+      </div>
+      <div class="rounded-xl border p-5 border-gray-200 dark:border-gray-700">
+        <div class="font-bold mb-1">npm / bundler</div>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Install via npm and import in your build pipeline.</p>
+        <div class="code-block-wrapper pt-4">
+          <span class="code-lang-badge">Shell</span>
+          <button class="code-copy-btn" onclick="(function(b){var t=document.getElementById('cdn-npm').textContent;navigator.clipboard.writeText(t).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})})(this)">Copy</button>
+          <pre class="code-block" style="font-size:11px"><code><span class="hl-fn">npm</span> install ipfyi-embed</code></pre>
+          <script type="text/plain" id="cdn-npm">npm install ipfyi-embed</script>
+        </div>
+      </div>
+      <div class="rounded-xl border p-5 border-gray-200 dark:border-gray-700">
+        <div class="font-bold mb-1">Self-hosted</div>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Host on your own CDN for full control.</p>
+        <div class="code-block-wrapper pt-4">
+          <span class="code-lang-badge">HTML</span>
+          <button class="code-copy-btn" onclick="(function(b){var t=document.getElementById('cdn-self').textContent;navigator.clipboard.writeText(t).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent='Copy'},1500)})})(this)">Copy</button>
+          <pre class="code-block" style="font-size:11px"><code><span class="hl-tag">&lt;script</span> <span class="hl-attr">src</span>=<span class="hl-val">"/assets/ipfyi-embed.min.js"</span><span class="hl-tag">&gt;&lt;/script&gt;</span></code></pre>
+          <script type="text/plain" id="cdn-self">&lt;script src="/assets/ipfyi-embed.min.js"&gt;&lt;/script&gt;</script>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NETWORK FYI FAMILY
+═══════════════════════════════════════════════════════════ -->
+<section class="border-t border-gray-100 dark:border-gray-800 py-16 bg-gray-50 dark:bg-gray-900/50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <h2 class="text-3xl font-bold mb-3 text-center">Network FYI Family</h2>
+    <p class="text-center text-gray-500 dark:text-gray-400 mb-10">Part of <a href="https://fyipedia.com" target="_blank" rel="noopener" class="underline underline-offset-2">FYIPedia</a>. Hub: <a href="https://wirefyi.com" target="_blank" rel="noopener" class="underline underline-offset-2">wirefyi.com</a></p>
+    <div class="grid sm:grid-cols-3 gap-4">
+      <a href="https://cablefyi.com" target="_blank" rel="noopener" class="group p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-600 transition-all hover:shadow-sm">
+        <div class="flex items-center gap-2.5 mb-2">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#4338CA22">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4338CA" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          </div>
+          <div><div class="font-semibold text-sm">CableFYI</div><div class="text-xs text-gray-400">cablefyi.com</div></div>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Submarine cables, landing points, operators, bandwidth</p>
+        <div class="mt-3 text-xs font-mono" style="color:#4338CA">data-cablefyi</div>
+      </a>
+      <a href="https://ipfyi.com" target="_blank" rel="noopener" class="group p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-600 transition-all hover:shadow-sm">
+        <div class="flex items-center gap-2.5 mb-2">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#33415522">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div><div class="font-semibold text-sm">IPFYI</div><div class="text-xs text-gray-400">ipfyi.com</div></div>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400">IP geolocation, ASN lookup, CIDR ranges, ISP info</p>
+        <div class="mt-3 text-xs font-mono" style="color:#334155">data-ipfyi</div>
+      </a>
+      <a href="https://statuscodefyi.com" target="_blank" rel="noopener" class="group p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-600 transition-all hover:shadow-sm">
+        <div class="flex items-center gap-2.5 mb-2">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#7C3AED22">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <div><div class="font-semibold text-sm">StatusCodeFYI</div><div class="text-xs text-gray-400">statuscodefyi.com</div></div>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400">HTTP status codes, protocol references, scenarios</p>
+        <div class="mt-3 text-xs font-mono" style="color:#7C3AED">data-statuscodefyi</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FYIPEDIA ECOSYSTEM
+═══════════════════════════════════════════════════════════ -->
+<section class="border-t border-gray-100 dark:border-gray-800 py-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <h2 class="text-2xl font-bold mb-3 text-center">FYIPedia Developer Tools</h2>
+    <p class="text-center text-gray-500 dark:text-gray-400 mb-8 text-sm">Embed widgets across 11 knowledge families</p>
+    <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300 text-xs">Family</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300 text-xs">Sites</th>
+            <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300 text-xs">Widget Package</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 font-semibold" style="color:#334155">
+            <td class="px-4 py-3">Network FYI</td>
+            <td class="px-4 py-3 text-gray-600 dark:text-gray-400 font-normal">CableFYI · IPFYI · StatusCodeFYI</td>
+            <td class="px-4 py-3 font-mono font-normal text-gray-600 dark:text-gray-400">ipfyi-embed</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">Creative FYI</td>
+            <td class="px-4 py-3 text-gray-500">ColorFYI · FontFYI · EmojiFYI · SymbolFYI · UnicodeFYI</td>
+            <td class="px-4 py-3 font-mono text-gray-500">colorfyi-embed …</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">Health FYI</td>
+            <td class="px-4 py-3 text-gray-500">AnatomyFYI · PillFYI · DrugFYI · NutriFYI</td>
+            <td class="px-4 py-3 font-mono text-gray-500">anatomyfyi-embed …</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">Science FYI</td>
+            <td class="px-4 py-3 text-gray-500">ChemFYI · AlloyFYI · GemFYI · StarFYI · MineralFYI</td>
+            <td class="px-4 py-3 font-mono text-gray-500">chemfyi-embed …</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">Transport FYI</td>
+            <td class="px-4 py-3 text-gray-500">AirportFYI · AirlineFYI · PlaneFYI · TrainFYI</td>
+            <td class="px-4 py-3 font-mono text-gray-500">airportfyi-embed …</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-3 text-gray-700 dark:text-gray-300">Geo FYI</td>
+            <td class="px-4 py-3 text-gray-500">DistanceFYI · MountainFYI · QuakeFYI · ZipFYI</td>
+            <td class="px-4 py-3 font-mono text-gray-500">distancefyi-embed …</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-center mt-4 text-sm text-gray-400">Plus: Nature FYI · Beverage FYI · Tag FYI · Utility FYI · Guide FYI — <a href="https://fyipedia.com/developers/" target="_blank" rel="noopener" class="underline underline-offset-2 hover:text-gray-600">fyipedia.com/developers</a></p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<footer class="border-t border-gray-200 dark:border-gray-800 py-12 bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:#334155" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span class="font-semibold">IPFYI Embed</span>
+        </div>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Network &amp; internet infrastructure widgets for any website. Shadow DOM isolated. MIT licensed.</p>
+      </div>
+      <div>
+        <div class="font-semibold text-sm mb-3">Resources</div>
+        <ul class="space-y-1.5 text-sm text-gray-500 dark:text-gray-400">
+          <li><a href="https://ipfyi.com" target="_blank" rel="noopener" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">IPFYI Website ↗</a></li>
+          <li><a href="https://ipfyi.com/api/v1/" target="_blank" rel="noopener" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">REST API Docs ↗</a></li>
+          <li><a href="https://github.com/fyipedia/ipfyi-embed" target="_blank" rel="noopener" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">GitHub Repository ↗</a></li>
+          <li><a href="https://www.npmjs.com/package/ipfyi-embed" target="_blank" rel="noopener" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">npm Package ↗</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-semibold text-sm mb-3">Network FYI Family</div>
+        <ul class="space-y-1.5 text-sm text-gray-500 dark:text-gray-400">
+          <li><a href="https://cablefyi.com" target="_blank" rel="noopener" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">CableFYI ↗</a></li>
+          <li><a href="https://ipfyi.com" target="_blank" rel="noopener" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">IPFYI ↗</a></li>
+          <li><a href="https://statuscodefyi.com" target="_blank" rel="noopener" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">StatusCodeFYI ↗</a></li>
+          <li><a href="https://wirefyi.com" target="_blank" rel="noopener" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">WireFYI (Hub) ↗</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
+      <span>© 2024 FYIPedia. MIT License. <a href="https://fyipedia.com" target="_blank" rel="noopener" class="hover:text-gray-600 dark:hover:text-gray-300 underline underline-offset-2">fyipedia.com</a></span>
+      <button @click="darkMode=!darkMode; document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', darkMode?'dark':'light')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
+        <svg x-show="!darkMode" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg x-show="darkMode" x-cloak width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <span x-text="darkMode ? 'Light mode' : 'Dark mode'"></span>
+      </button>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
