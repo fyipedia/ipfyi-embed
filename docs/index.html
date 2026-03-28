@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPFYI Embed Widget — Networks Widgets for Any Website</title>
+  <meta name="description" content="Embed IPFYI networks widgets on any website. Zero dependencies, Shadow DOM isolation, 4 themes, 2 styles.">
+  <meta property="og:title" content="IPFYI Embed Widget">
+  <meta property="og:description" content="Embed IPFYI networks widgets on any website.">
+  <meta property="og:url" content="https://widget.ipfyi.com">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://widget.ipfyi.com">
+  <style>
+    :root { --accent: #334155; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: #1e293b; line-height: 1.6; }
+    .dark body { color: #f3f4f6; background: #0f172a; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    .hero { background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #000)); color: #fff; padding: 64px 0; text-align: center; }
+    .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
+    .hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto 24px; }
+    .badge-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .badge-link { display: inline-block; background: rgba(255,255,255,0.2); color: #fff; padding: 6px 16px; border-radius: 999px; font-size: 0.875rem; font-weight: 500; text-decoration: none; transition: background 0.2s; }
+    .badge-link:hover { background: rgba(255,255,255,0.3); text-decoration: none; }
+    section { padding: 48px 0; border-bottom: 1px solid #e2e8f0; }
+    .dark section { border-color: #334155; }
+    section h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 16px; color: var(--accent); }
+    pre { background: #1e1e2e; color: #cdd6f4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 0.875rem; line-height: 1.5; font-family: ui-monospace, 'SF Mono', monospace; position: relative; }
+    .dark pre { background: #11111b; }
+    code { font-family: ui-monospace, 'SF Mono', monospace; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    .dark th, .dark td { border-color: #334155; }
+    th { font-weight: 600; color: #64748b; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+    .widget-demo { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; padding: 24px 0; }
+    .theme-toggle { position: fixed; top: 16px; right: 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 8px 14px; font-size: 0.875rem; cursor: pointer; z-index: 100; font-family: inherit; }
+    footer { padding: 32px 0; text-align: center; font-size: 0.875rem; color: #64748b; }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="document.documentElement.classList.toggle('dark')">Toggle Dark</button>
+
+  <div class="hero">
+    <div class="container">
+      <h1>IPFYI Embed Widget</h1>
+      <p>Embed networks widgets on any website. Zero dependencies, Shadow DOM isolation, 4 themes.</p>
+      <div class="badge-row">
+        <a class="badge-link" href="https://www.npmjs.com/package/ipfyi-embed" target="_blank" rel="noopener">npm</a>
+        <a class="badge-link" href="https://github.com/fyipedia/ipfyi-embed" target="_blank" rel="noopener">GitHub</a>
+        <a class="badge-link" href="https://ipfyi.com" target="_blank" rel="noopener">Visit IPFYI</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <section>
+      <h2>Quick Start</h2>
+      <pre><code>&lt;div data-ipfyi="entity" data-slug="asn" data-theme="light"&gt;&lt;/div&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"&gt;&lt;/script&gt;</code></pre>
+    </section>
+
+    <section>
+      <h2>Widget Gallery</h2>
+      <div class="widget-demo">
+        <div data-ipfyi="entity" data-slug="asn" data-theme="light"></div>
+        <div data-ipfyi="entity" data-slug="asn" data-theme="dark"></div>
+      </div>
+      <div class="widget-demo">
+        <div data-ipfyi="search" data-theme="light" data-placeholder="Search Networks..."></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Widget Types</h2>
+      <table>
+        <thead><tr><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+            <tr><td><code>entity</code></td><td>Entity detail card — cable, ASN, or status code</td></tr>
+            <tr><td><code>glossary</code></td><td>Glossary term definition with cross-references</td></tr>
+            <tr><td><code>search</code></td><td>Search box linking to the full database</td></tr>
+            <tr><td><code>compare</code></td><td>Side-by-side entity comparison</td></tr>
+            <tr><td><code>faq</code></td><td>FAQ accordion with expand/collapse</td></tr>
+            <tr><td><code>isp</code></td><td>ISP detail card — name, type, country, ASN count, IP blocks</td></tr>
+            <tr><td><code>ip-range</code></td><td>IP range card — CIDR, host count, version, ASN</td></tr>
+            <tr><td><code>asn-badge</code></td><td>Inline ASN category colored badge (cloud/isp/cdn/enterprise)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Themes</h2>
+      <div class="widget-demo">
+        <div data-ipfyi="entity" data-slug="asn" data-theme="light" data-style-variant="modern"></div>
+        <div data-ipfyi="entity" data-slug="asn" data-theme="dark" data-style-variant="modern"></div>
+        <div data-ipfyi="entity" data-slug="asn" data-theme="sepia" data-style-variant="modern"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Styles</h2>
+      <div class="widget-demo">
+        <div data-ipfyi="entity" data-slug="asn" data-theme="light" data-style-variant="modern"></div>
+        <div data-ipfyi="entity" data-slug="asn" data-theme="light" data-style-variant="clean"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>CDN Options</h2>
+      <h3 style="font-size:1rem;margin-bottom:8px;">jsDelivr (recommended)</h3>
+      <pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"&gt;&lt;/script&gt;</code></pre>
+      <h3 style="font-size:1rem;margin:16px 0 8px;">npm</h3>
+      <pre><code>npm install ipfyi-embed</code></pre>
+    </section>
+
+    <section>
+      <h2>Network FYI Family</h2>
+      <table>
+        <thead><tr><th>Site</th><th>Domain</th><th>Focus</th><th>Package</th></tr></thead>
+        <tbody>
+            <tr><td><a href="https://cablefyi.com" target="_blank" rel="noopener">CableFYI</a></td><td>cablefyi.com</td><td>151 cables, connectors, standards, compatibility</td><td><a href="https://www.npmjs.com/package/cablefyi-embed" target="_blank" rel="noopener">npm</a></td></tr>
+            <tr style="font-weight:700;"><td><a href="https://ipfyi.com" target="_blank" rel="noopener">IPFYI</a></td><td>ipfyi.com</td><td>ASN, ISP, IP ranges, network infrastructure</td><td><a href="https://www.npmjs.com/package/ipfyi-embed" target="_blank" rel="noopener">npm</a></td></tr>
+            <tr><td><a href="https://statuscodefyi.com" target="_blank" rel="noopener">StatusCodeFYI</a></td><td>statuscodefyi.com</td><td>HTTP/SMTP/gRPC status codes, protocols, debugging</td><td><a href="https://www.npmjs.com/package/statuscodefyi-embed" target="_blank" rel="noopener">npm</a></td></tr>
+            <tr><td><a href="https://tldfyi.com" target="_blank" rel="noopener">TLDFYI</a></td><td>tldfyi.com</td><td>TLD registry, domain extensions (coming soon)</td><td><span style="color:#9ca3af;">Coming soon</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Built by <a href="https://fyipedia.com" target="_blank" rel="noopener">FYIPedia</a> &mdash; MIT License</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"></script>
+</body>
+</html>

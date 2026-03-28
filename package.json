@@ -1,0 +1,44 @@
+{
+  "name": "ipfyi-embed",
+  "version": "1.0.0",
+  "description": "Embed IPFYI widgets — ASN lookup, ISP cards, IP range details, network infrastructure. Zero dependencies, Shadow DOM, 4 themes.",
+  "main": "dist/embed.min.js",
+  "module": "dist/embed.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "ip",
+    "asn",
+    "isp",
+    "bgp",
+    "cidr",
+    "network",
+    "ip-range",
+    "geolocation",
+    "embed",
+    "widget",
+    "ipfyi",
+    "ipfyi.com",
+    "shadow-dom",
+    "zero-dependencies",
+    "fyipedia",
+    "networkfyi"
+  ],
+  "homepage": "https://widget.ipfyi.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fyipedia/ipfyi-embed"
+  },
+  "bugs": {
+    "url": "https://github.com/fyipedia/ipfyi-embed/issues"
+  },
+  "license": "MIT",
+  "author": "FYIPedia <dev@fyipedia.com>",
+  "publishConfig": {
+    "access": "public"
+  }
+}
