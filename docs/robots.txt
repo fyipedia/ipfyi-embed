@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# IPFYI Embed Widget
+# Main site: https://ipfyi.com
+# Widget docs: https://widget.ipfyi.com
+# npm: https://www.npmjs.com/package/ipfyi-embed
