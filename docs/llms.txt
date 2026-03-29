@@ -1,21 +1,52 @@
 # IPFYI Embed Widget
 
-> Embeddable IPFYI widgets for any website. Zero dependencies, Shadow DOM isolation, 4 themes (light/dark/sepia/auto).
+> IP geolocation, ASN lookup. Embeddable widgets for any website. Zero dependencies, Shadow DOM isolation.
 
 ## Quick Start
 
-Add to any HTML page:
-- Script: <script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"></script>
+```html
+<script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"></script>
+<div data-ipfyi="isp" data-slug="example"></div>
+```
+
+## Available Widget Types (8)
+
+- entity: `data-ipfyi="entity"`
+- glossary: `data-ipfyi="glossary"`
+- guide: `data-ipfyi="guide"`
+- compare: `data-ipfyi="compare"`
+- search: `data-ipfyi="search"`
+- faq: `data-ipfyi="faq"`
+- isp (interactive): `data-ipfyi="isp"`
+- ip-range (interactive): `data-ipfyi="ip-range"`
+
+## Customization
+
+- **Themes**: light, dark, sepia, auto (follows system preference)
+- **Sizes**: compact (280px), default (420px), large (720px)
+- **Styles**: modern, classic
+
+```html
+<div data-ipfyi="isp" data-slug="example"
+     data-theme="auto" data-size="compact" data-style-variant="modern"></div>
+```
+
+## Integration Methods
+
+1. **Script tag** (recommended): `<script src="https://cdn.jsdelivr.net/npm/ipfyi-embed@1/dist/embed.min.js"></script>`
+2. **iframe**: `https://ipfyi.com/iframe/entity/{slug}/`
+3. **oEmbed**: `https://ipfyi.com/oembed?url={page_url}&format=json`
+4. **Badge**: `https://ipfyi.com/badge/site.svg`
 
 ## Links
 
 - Main site: https://ipfyi.com
 - Widget docs: https://widget.ipfyi.com
-- npm: https://www.npmjs.com/package/ipfyi-embed
+- API documentation: https://ipfyi.com/developers/
+- npm package: https://www.npmjs.com/package/ipfyi-embed
 - GitHub: https://github.com/fyipedia/ipfyi-embed
-- API: https://ipfyi.com/developers/
 
-## Network FYI Widget Family
+## Network FYI Widget Network
 
 - [CableFYI Widget](https://widget.cablefyi.com)
 - [TLDFYI Widget](https://widget.tldfyi.com)
