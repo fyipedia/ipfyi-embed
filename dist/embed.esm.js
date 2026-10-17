@@ -847,7 +847,7 @@ function renderError(container, message, config) {
   container.innerHTML = `
     <div class="networkfyi-error">
       <p>${message}</p>
-      <a href="https://${config.domain}" target="_blank" rel="noopener">
+      <a href="https://${config.domain}" target="_blank" rel="nofollow noopener">
         Visit ${config.name}
       </a>
     </div>
@@ -855,7 +855,7 @@ function renderError(container, message, config) {
 }
 var externalLinkIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
 function poweredByHTML(config) {
-  return `<span class="networkfyi-powered">Powered by <a href="https://${config.domain}" target="_blank" rel="noopener">${config.name}</a></span>`;
+  return `<span class="networkfyi-powered">Powered by <a href="https://${config.domain}" target="_blank" rel="nofollow noopener">${config.name}</a></span>`;
 }
 
 // src/api.ts
@@ -929,7 +929,7 @@ function renderGlossaryCard(data, config) {
   const glossaryUrl = `https://${config.domain}/glossary/`;
   const relatedTerms = data.related_terms;
   const relatedPills = relatedTerms && relatedTerms.length > 0 ? `<div class="networkfyi-pills">${relatedTerms.map(
-    (rt) => `<a class="networkfyi-pill" href="https://${config.domain}/${glossaryBase}/${esc(rt.slug)}/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">${esc(rt.name)}</a>`
+    (rt) => `<a class="networkfyi-pill" href="https://${config.domain}/${glossaryBase}/${esc(rt.slug)}/" target="_blank" rel="nofollow noopener" style="text-decoration:none;color:inherit;">${esc(rt.name)}</a>`
   ).join("")}</div>` : "";
   return `
     <div class="networkfyi-header">
@@ -943,8 +943,8 @@ function renderGlossaryCard(data, config) {
     </div>
     ${extended ? `<div style="padding:0 18px 10px;font-size:0.85rem;color:var(--muted);line-height:1.5;">${esc(extended)}</div>` : ""}
     ${relatedPills}
-    <div class="networkfyi-view-link"><a href="${termUrl}" target="_blank" rel="noopener">${esc(name)} ${externalLinkIcon}</a></div>
-    <div class="networkfyi-view-link"><a href="${glossaryUrl}" target="_blank" rel="noopener">Full glossary on ${esc(config.name)} ${externalLinkIcon}</a></div>
+    <div class="networkfyi-view-link"><a href="${termUrl}" target="_blank" rel="nofollow noopener">${esc(name)} ${externalLinkIcon}</a></div>
+    <div class="networkfyi-view-link"><a href="${glossaryUrl}" target="_blank" rel="nofollow noopener">Full glossary on ${esc(config.name)} ${externalLinkIcon}</a></div>
     ${poweredByHTML(config)}
   `;
 }
@@ -1012,7 +1012,7 @@ function renderCableCard(data, config) {
     </div>
     ${description ? `<div class="networkfyi-desc">${esc(description.length > 200 ? description.slice(0, 200) + "..." : description)}</div>` : ""}
     ${standardsPills}
-    <div class="networkfyi-view-link"><a href="${cableUrl}" target="_blank" rel="noopener">View on ${esc(config.name)} ${externalLinkIcon}</a></div>
+    <div class="networkfyi-view-link"><a href="${cableUrl}" target="_blank" rel="nofollow noopener">View on ${esc(config.name)} ${externalLinkIcon}</a></div>
     ${poweredByHTML(config)}
   `;
 }
@@ -1118,7 +1118,7 @@ function renderASNCard(data, config) {
       ${website ? kvRow("Website", website) : ""}
     </div>
     ${description ? `<div class="networkfyi-desc">${esc(description.length > 200 ? description.slice(0, 200) + "..." : description)}</div>` : ""}
-    <div class="networkfyi-view-link"><a href="${asnUrl}" target="_blank" rel="noopener">View on ${esc(config.name)} ${externalLinkIcon}</a></div>
+    <div class="networkfyi-view-link"><a href="${asnUrl}" target="_blank" rel="nofollow noopener">View on ${esc(config.name)} ${externalLinkIcon}</a></div>
     ${poweredByHTML(config)}
   `;
 }
@@ -1160,7 +1160,7 @@ function renderISPCard(data, config) {
       ${website ? kvRow("Website", website) : ""}
     </div>
     ${description ? `<div class="networkfyi-desc">${esc(description.length > 200 ? description.slice(0, 200) + "..." : description)}</div>` : ""}
-    <div class="networkfyi-view-link"><a href="${ispUrl}" target="_blank" rel="noopener">View on ${esc(config.name)} ${externalLinkIcon}</a></div>
+    <div class="networkfyi-view-link"><a href="${ispUrl}" target="_blank" rel="nofollow noopener">View on ${esc(config.name)} ${externalLinkIcon}</a></div>
     ${poweredByHTML(config)}
   `;
 }
@@ -1194,7 +1194,7 @@ function renderIPRangeCard(data, config) {
       ${countryCode ? kvRow("Country", countryCode) : ""}
       ${asnData ? kvRow("ASN", `AS${String((_g = (_f = asnData.number) != null ? _f : asnData.name) != null ? _g : "")}`) : ""}
     </div>
-    <div class="networkfyi-view-link"><a href="${rangeUrl}" target="_blank" rel="noopener">View on ${esc(config.name)} ${externalLinkIcon}</a></div>
+    <div class="networkfyi-view-link"><a href="${rangeUrl}" target="_blank" rel="nofollow noopener">View on ${esc(config.name)} ${externalLinkIcon}</a></div>
     ${poweredByHTML(config)}
   `;
 }
@@ -1241,7 +1241,7 @@ function renderStatusCodeCard(data, config) {
     const rcColor = categoryColor(statusCategory(rcCode));
     return badge(`${rcCode} ${rcName}`, rcColor);
   }).join(" ")}</div>` : ""}
-    <div class="networkfyi-view-link"><a href="${codeUrl}" target="_blank" rel="noopener">View on ${esc(config.name)} ${externalLinkIcon}</a></div>
+    <div class="networkfyi-view-link"><a href="${codeUrl}" target="_blank" rel="nofollow noopener">View on ${esc(config.name)} ${externalLinkIcon}</a></div>
     ${poweredByHTML(config)}
   `;
 }
@@ -1292,7 +1292,7 @@ function initEntityWidget(el, config) {
         html = `
             <div style="padding:16px;">
               <div style="font-size:1rem;font-weight:600;margin-bottom:8px;">${esc(name)}</div>
-              <a href="${esc(entityUrl)}" target="_blank" rel="noopener"
+              <a href="${esc(entityUrl)}" target="_blank" rel="nofollow noopener"
                  style="color:${config.accent};text-decoration:none;font-size:0.85rem;">
                 View on ${esc(config.name)} ${externalLinkIcon}
               </a>
@@ -1363,7 +1363,7 @@ function initCompareWidget(el, config) {
         </div>
         ${diffRows}
         ${summary ? `<div class="networkfyi-desc">${esc(summary)}</div>` : ""}
-        <div class="networkfyi-view-link"><a href="${esc(compareUrl)}" target="_blank" rel="noopener">Compare on ${esc(config.name)} ${externalLinkIcon}</a></div>
+        <div class="networkfyi-view-link"><a href="${esc(compareUrl)}" target="_blank" rel="nofollow noopener">Compare on ${esc(config.name)} ${externalLinkIcon}</a></div>
         ${poweredByHTML(config)}
       `;
   }).catch(() => {
@@ -1536,7 +1536,7 @@ function initSearchWidget(el, config) {
       const href = item.url ? item.url.startsWith("http") ? item.url : `https://${config.domain}${item.url}` : `https://${config.domain}/${config.entitySlug}/${esc(item.slug || "")}/`;
       html += `
         <a class="networkfyi-result-item"
-           href="${esc(href)}" target="_blank" rel="noopener" role="option" tabindex="-1"
+           href="${esc(href)}" target="_blank" rel="nofollow noopener" role="option" tabindex="-1"
            style="display:block;padding:8px 14px;text-decoration:none;color:var(--text);border-bottom:1px solid var(--border);transition:background 0.1s;">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
             <span style="font-size:0.875rem;font-weight:500;">${esc(item.name)}</span>
